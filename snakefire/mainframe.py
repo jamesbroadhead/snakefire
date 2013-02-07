@@ -698,10 +698,15 @@ class Snakefire(object):
         if uploads:
             html = ""
             for upload in uploads:
+                filename = ""
+                if len(upload["name"]) > 18:
+                    filename = upload["name"][:18] + "..."
+                else:
+                    filename = upload["name"]
                 html += "{br}&bull; <a href=\"{url}\">{name}</a>".format(
                     br = "<br />" if html else "",
                     url = upload["full_url"],
-                    name = upload["name"]
+                    name = filename
                 )
             html = unicode("{text}<br />{html}".format(
                 text = self._("Latest uploads:"),
