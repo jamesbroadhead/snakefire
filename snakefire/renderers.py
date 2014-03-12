@@ -9,20 +9,96 @@ from urlparse import urlparse
 
 class MessageRenderer(QtCore.QThread):
     MESSAGES = {
-        "alert": u'<div class="alert"><span class="time">[{time}]</span> <span class="author">{user}</span>: {message}</div>',
-        "image": u'<span id="{url_md5}" class="upload image"><a href="{url}"><img src="data:image/{type};base64,{data}" title="{name}" {attribs} /></a></span><input type="button" onClick=\'{js}\' value="Toggle Image" />',
-        "image_url": u'<span id="{url_md5}" class="upload image"><a href="{url}"><img src="{url}" title="{name}" {attribs} /></a></span><input id="hide" type=button onClick=\'{js}\' value="Toggle Image" />',
-        "join": u'<div class="joined">--&gt; {user} joined {room}</div>',
-        "leave": u'<div class="left">&lt;-- {user} has left {room}</div>',
-        "message_self": u'<div class="message"><span class="time">[{time}]</span> <span class="author self">{user}</span>: {message}</div>',
-        "no_time_message_self": u'<div class="message"><span class="author self">{user}</span>: {message}</div>',
-        "message": u'<div class="message"><span class="time">[{time}]</span> <span class="author">{user}</span>: {message}</div>',
-        "no_time_message": u'<div class="message"><span class="author">{user}</span>: {message}</div>',
-        "paste": u'<div class="paste"><pre>{message}</pre></div>',
-        "upload": u'<span class="upload"><a href="{url}">{name}</a></span>',
-        "link": u'<a href="{url}">{name}</a>',
-        "topic": u'<div class="topic">{user} changed topic to <span class="new_topic">{topic}</span></div>',
-        "tweet": u'<div class="tweet"><a href="{url_user}">{user}</a> <a href="{url}">tweeted</a>: {message}</div>'
+        "alert": """
+            <div class="item notify">
+                <strong class="author">{user}</strong> <small class="time text-muted">at {time}</small>
+                <blockquote class="message">
+                    {message}
+                </blockquote>
+            </div>
+        """,
+        "image": """
+            <div class="item">
+                <div>
+                    <a href="{url}">
+                        <img src="data:image/{type};base64,{data}" title="{name}" {attribs}>
+                    </a>
+                </div>
+            </div>
+        """,
+        "image_url": """
+            <div class="item">
+                <div>
+                    <a href="{url}">
+                        <img src="{url}" title="{name}" {attribs}>
+                    </a>
+                </div>
+            </div>
+        """,
+        "join": u'<div class="item joined text-muted"><small>{user} joined {room}</small></div>',
+        "leave": u'<div class="item left text-muted"><small>{user} has left {room}</small></div>',
+        "message_self": """
+            <div class="item">
+                <strong class="author">{user}</strong> <small class="time text-muted">at {time}</small>
+                <blockquote class="message self">
+                    {message}
+                </blockquote>
+            </div>
+        """,
+        "no_time_message_self": """
+            <div class="item">
+                <strong class="author">{user}</strong>
+                <blockquote class="message self">
+                    {message}
+                </blockquote>
+            </div>
+        """,
+        "message": """
+            <div class="item">
+                <strong class="author">{user}</strong> <small class="time text-muted">at {time}</small>
+                <blockquote class="message">
+                    {message}
+                </blockquote>
+            </div>
+        """,
+        "no_time_message": """
+            <div class="item">
+                <strong class="author">{user}</strong>
+                <blockquote class="message">
+                    {message}
+                </blockquote>
+            </div>
+        """,
+        "paste": """
+            <div class="item">
+                <pre><code>
+                    {message}
+                </code></pre>
+            </div>
+        """,
+        "upload": """
+            <div class="item">
+                <blockquote class="message">
+                    <a href="{url}">{name}</a>
+                </blockquote>
+            </div>
+        """,
+        "link": """
+            <div class="item">
+                <blockquote class="message">
+                    <a href="{url}">{name}</a>
+                </blockquote>
+            </div>
+        """,
+        "topic": u'<div class="item"><small class="text-muted">{user} changed topic to <strong>{topic}</strong></small></div>',
+        "tweet": """
+            <div class="item tweet">
+                <strong class="author"><a href="{url_user}">{user}</a></strong> sent a <a href="{url}">tweet</a>
+                <blockquote>
+                    {message}
+                </blockquote>
+            </div>
+        """,
     }
 
     def __init__(self, apiToken, maximumImageWidth, room, message, live=True, updateRoom=True, showTimestamps=True, alert=False, alertIsDirectPing=False, parent=None):
