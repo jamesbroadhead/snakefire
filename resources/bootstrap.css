@@ -1785,6 +1785,7 @@ blockquote.self {
 
 .tweet {
     background: #eeeeff;
+    padding: 5px;
 }
 
 img {

@@ -69,34 +69,16 @@ class MessageRenderer(QtCore.QThread):
                 </blockquote>
             </div>
         """,
-        "paste": """
-            <div class="item">
-                <pre><code>
-                    {message}
-                </code></pre>
-            </div>
-        """,
-        "upload": """
-            <div class="item">
-                <blockquote class="message">
-                    <a href="{url}">{name}</a>
-                </blockquote>
-            </div>
-        """,
-        "link": """
-            <div class="item">
-                <blockquote class="message">
-                    <a href="{url}">{name}</a>
-                </blockquote>
-            </div>
-        """,
+        "paste": '<pre><code>{message}</code></pre>',
+        "upload": '<a href="{url}">{name}</a>',
+        "link": '<a href="{url}">{name}</a>',
         "topic": u'<div class="item"><small class="text-muted">{user} changed topic to <strong>{topic}</strong></small></div>',
         "tweet": """
             <div class="item tweet">
                 <strong class="author"><a href="{url_user}">{user}</a></strong> sent a <a href="{url}">tweet</a>
-                <blockquote>
+                <div>
                     {message}
-                </blockquote>
+                </div>
             </div>
         """,
     }
